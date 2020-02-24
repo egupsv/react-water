@@ -65,7 +65,7 @@ export default class Form extends React.Component {
     const newBottles = form.bottles;
     const keys = Object.keys(newBottles);
     keys.reduce((acc, el) => {
-      acc[el]['active'] = (el === target.alt ? true : false);
+      acc[el].active = (el === target.alt);
       return acc;
     }, newBottles);
     this.setState({ form: { ...form, bottles: newBottles } });
@@ -74,22 +74,21 @@ export default class Form extends React.Component {
   handleIncrease = ({ target }) => {
     const { form } = this.state;
     const newBottles = form.bottles;
-    newBottles[target.dataset.size]['amount'] += 1;
+    newBottles[target.dataset.size].amount += 1;
     this.setState({ form: { ...form, bottles: newBottles } });
   }
 
   handleDecrease = ({ target }) => {
     const { form } = this.state;
     const newBottles = form.bottles;
-    if (newBottles[target.dataset.size]['amount'] > 0) {
-      newBottles[target.dataset.size]['amount'] -= 1;
+    if (newBottles[target.dataset.size].amount > 0) {
+      newBottles[target.dataset.size].amount -= 1;
     }
     this.setState({ form: { ...form, bottles: newBottles } });
   }
 
   handleLeft = () => {
     const { form } = this.state;
-    const days = makeDays();
     const firstDay = days[0][0];
     if (form.day === '') {
       this.setState({ form: { ...form, day: firstDay, time: '' } });
@@ -102,7 +101,6 @@ export default class Form extends React.Component {
 
   handleRight = () => {
     const { form } = this.state;
-    const days = makeDays();
     const lastDay = days[days.length - 1][0];
     if (form.day === '') {
       this.setState({ form: { ...form, day: lastDay, time: '' } });
@@ -118,7 +116,7 @@ export default class Form extends React.Component {
     const index = days.findIndex((el) => String(el[0]) === target.dataset.date);
     this.setState({ form: { ...form, day: days[index][0] } });
   }
-  
+
   handleChooseTime = ({ target }) => {
     const { form } = this.state;
     const index = hours.findIndex((el) => el[0] === target.dataset.time);
@@ -127,11 +125,16 @@ export default class Form extends React.Component {
 
   onClickSubmit = () => {
     const { form } = this.state;
-    if (form.bottles.big.amount === 0 && form.bottles.average.amount === 0 && form.bottles.small.amount ===0) {
+    if (form.bottles.big.amount === 0
+      && form.bottles.average.amount === 0
+      && form.bottles.small.amount === 0) {
+      // eslint-disable-next-line no-undef
       alert('не выбраны объем тары и количество');
     } else if (form.day === '') {
+      // eslint-disable-next-line no-undef
       alert('не выбрана дата доставки');
     } else if (form.time === '') {
+      // eslint-disable-next-line no-undef
       alert('не выбрано время доставки');
     }
   }
@@ -146,30 +149,28 @@ export default class Form extends React.Component {
     return <>
       {listOfImages.map(([size, el, elActive]) => (<div className="bottle-column">
         <div className="bottle" onClick={this.handleChangeImage}>
-          <img className={!form.bottles[size].active ? "shown" : "hidden"} src={el} alt={size}></img>
-          <img className={form.bottles[size].active ? "shown" : "hidden"} src={elActive} alt={size}></img>
+          <img className={!form.bottles[size].active ? 'shown' : 'hidden'} src={el} alt={size}></img>
+          <img className={form.bottles[size].active ? 'shown' : 'hidden'} src={elActive} alt={size}></img>
         </div>
-        <div className={form.bottles[size].active ? "shown" : "hidden"}>
+        <div className={form.bottles[size].active ? 'shown' : 'hidden'}>
           <div className="counter">
             <img data-size={size} src={minus} onClick={this.handleDecrease} alt="minus"></img>
             <p className="amount">{form.bottles[size].amount}</p>
             <img data-size={size} src={plus} onClick={this.handleIncrease} alt="plus"></img>
           </div>
         </div>
-      </div>))}</>
+      </div>))}</>;
   }
 
   renderDays() {
     const { form } = this.state;
     return <>
       <img src={toTheLeft} onClick={this.handleLeft} alt="to-the-left"></img>
-      {days.map(([date, , weekday]) => 
-          <div className={date === form.day ? "date-circle circle-order" : "date-circle"} data-date={date} onClick={this.handleChooseDate}>  
-            <p className={date === form.day ? "date order" : "date"}  data-date={date}>{date}</p>
-            <p className={weekends.includes(weekday) ? "day weekend" : (date === form.day ? "day order" : "day")} data-date={date}>{weekday}</p>
-          </div>
-        
-        )}
+      {days.map(([date, , weekday]) => <div className={date === form.day ? 'date-circle circle-order' : 'date-circle'} data-date={date} onClick={this.handleChooseDate}>
+        <p className={date === form.day ? 'date order' : 'date'} data-date={date}>{date}</p>
+        {/* eslint-disable-next-line no-nested-ternary */}
+        <p className={weekends.includes(weekday) ? 'day weekend' : (date === form.day ? 'day order' : 'day')} data-date={date}>{weekday}</p>
+      </div>)}
       <img src={toTheRight} onClick={this.handleRight} alt="to-the-right"></img>
     </>;
   }
@@ -182,25 +183,24 @@ export default class Form extends React.Component {
     const current = (weekends.includes(weekday) ? weekendHours : hours);
     return <>
       {current.map(([name, time]) => <div onClick={this.handleChooseTime}>
-        <div className={form.time === time ? "time-circle circle-order" : "time-circle"} data-time={name}>  
-          <div className={time === form.time ? "time order" : "time" } data-time={name}>{time}</div>
+        <div className={form.time === time ? 'time-circle circle-order' : 'time-circle'} data-time={name}>
+          <div className={time === form.time ? 'time order' : 'time' } data-time={name}>{time}</div>
         </div>
       </div>)}
-    </> 
+    </>;
   }
 
   getTotalPrice() {
     const { bottles } = this.state.form;
-    let sum = 0;
-      for(let key in bottles) {
-        sum += bottles[key]['amount'] * bottles[key]['price'];
-      };
-    return sum;
+    const keys = Object.keys(bottles);
+    return keys.reduce((acc, key) => acc + bottles[key].amount * bottles[key].price, 0);
   }
 
   isDisabledSubmit() {
     const { form } = this.state;
-    if (form.bottles.big.amount === 0 && form.bottles.average.amount === 0 && form.bottles.small.amount ===0) {
+    if (form.bottles.big.amount === 0
+      && form.bottles.average.amount === 0
+      && form.bottles.small.amount === 0) {
       return true;
     }
     if (form.day === '' || form.time === '') {
@@ -240,7 +240,7 @@ export default class Form extends React.Component {
               title="используйте 7-значный номер или 10-значный номер с 8 в начале"
             />
           </div>
-        </div>  
+        </div>
         <div className="form-column">
           <div className="inputs">
             <input
@@ -323,15 +323,15 @@ export default class Form extends React.Component {
           <span className="tab">Заказ оформлен</span>
         </div>
         <div className="order-list">
-          <div className={form.bottles.big.amount === 0 ? "result-hidden" : "form-table"}>
+          <div className={form.bottles.big.amount === 0 ? 'result-hidden' : 'form-table'}>
             <span className="left">Бутыль 18,9л</span>
             <span className="right">{form.bottles.big.amount} шт.</span>
           </div>
-          <div className={form.bottles.average.amount === 0 ? "result-hidden" : "form-table"}>
+          <div className={form.bottles.average.amount === 0 ? 'result-hidden' : 'form-table'}>
             <span className="left">Упаковка бутылей 1,5л</span>
             <span className="right">{form.bottles.average.amount} шт.</span>
           </div>
-          <div className={form.bottles.small.amount === 0 ? "result-hidden" : "form-table"}>
+          <div className={form.bottles.small.amount === 0 ? 'result-hidden' : 'form-table'}>
             <span className="left">Упаковка бутылей 0,5л</span>
             <span className="right">{form.bottles.small.amount} шт.</span>
           </div>

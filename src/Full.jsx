@@ -3,7 +3,6 @@ import './App.css';
 import Form from './Form';
 
 export default class Full extends React.Component {
-  
   render() {
     return (
       <div>
@@ -14,6 +13,5 @@ export default class Full extends React.Component {
         </aside>
       <Form /></div>
     );
-    
   }
 }
