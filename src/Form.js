@@ -10,6 +10,7 @@ import plus from './images/plus.svg';
 import minus from './images/minus.svg';
 import toTheLeft from './images/to_the_left.svg';
 import toTheRight from './images/to_the_right.svg';
+import checkmark from './images/checkmark.svg';
 import makeDays from './days';
 
 const sourceState = {
@@ -54,7 +55,8 @@ export default class Form extends React.Component {
     this.setState({ submitted: true });
   }
 
-  handleReset = () => {
+  handleReset = (e) => {
+    e.preventDefault();
     this.setState({ form: sourceState.form, submitted: false });
   }
 
@@ -161,12 +163,12 @@ export default class Form extends React.Component {
     const { form } = this.state;
     return <>
       <img src={toTheLeft} onClick={this.handleLeft} alt="to-the-left"></img>
-      {days.map(([date, , weekday]) => <div onClick={this.handleChooseDate}>
-          <div className={date === form.day ? "date-circle circle-order" : "date-circle"} data-date={date}>  
+      {days.map(([date, , weekday]) => 
+          <div className={date === form.day ? "date-circle circle-order" : "date-circle"} data-date={date} onClick={this.handleChooseDate}>  
             <p className={date === form.day ? "date order" : "date"}  data-date={date}>{date}</p>
             <p className={weekends.includes(weekday) ? "day weekend" : (date === form.day ? "day order" : "day")} data-date={date}>{weekday}</p>
           </div>
-        </div>
+        
         )}
       <img src={toTheRight} onClick={this.handleRight} alt="to-the-right"></img>
     </>;
@@ -212,91 +214,138 @@ export default class Form extends React.Component {
     return (
       <form className="main-block" onSubmit={this.handleSubmit}>
         <div className="form-header">Заполните данные</div>
-          <div className="form-table">
-            <div className="form-column">
-              <div className="inputs">
-                <input
-                  required
-                  type="text"
-                  name="name"
-                  onChange={this.handleInput}
-                  value={form.name}
-                  className="field"
-                  placeHolder="ФИО"
-                />
-              </div>
-            <div className="inputs">
-              <input
-                required
-                type="text"
-                name="phone"
-                pattern="\d{11}|\d{7}"
-                onChange={this.handleInput}
-                value={form.phone}
-                className="field"
-                placeHolder="Телефон"
-                title="используйте 7-значный номер или 10-значный номер с 8 в начале"
-              />
-            </div>
-          </div>  
+        <div className="form-table">
           <div className="form-column">
             <div className="inputs">
               <input
                 required
-                type="email"
-                name="email"
-                onChange={this.handleInput}
-                value={form.email}
-                className="field"
-                placeHolder="Email"
-              />
-            </div>
-            <div className="inputs">
-              <input
-                required
                 type="text"
-                name="address"
+                name="name"
                 onChange={this.handleInput}
-                value={form.address}
+                value={form.name}
                 className="field"
-                placeHolder="Адрес доставки"
+                placeHolder="ФИО"
               />
             </div>
-          </div>
-        </div>
-        <div className="form-group">
-          <div className="form-check">
+          <div className="inputs">
             <input
               required
-              id="rules"
-              name="consent"
-              className="form-check-input"
-              onChange={this.handleConsent}
-              type="checkbox"
-              checked={form.consent}
+              type="text"
+              name="phone"
+              pattern="\d{11}|\d{7}"
+              onChange={this.handleInput}
+              value={form.phone}
+              className="field"
+              placeHolder="Телефон"
+              title="используйте 7-значный номер или 10-значный номер с 8 в начале"
             />
-            <label className="form-check-label" htmlFor="rules">
-              Я согласен на обработку персональных данных
-            </label>
+          </div>
+        </div>  
+        <div className="form-column">
+          <div className="inputs">
+            <input
+              required
+              type="email"
+              name="email"
+              onChange={this.handleInput}
+              value={form.email}
+              className="field"
+              placeHolder="Email"
+            />
+          </div>
+          <div className="inputs">
+            <input
+              required
+              type="text"
+              name="address"
+              onChange={this.handleInput}
+              value={form.address}
+              className="field"
+              placeHolder="Адрес доставки"
+            />
           </div>
         </div>
-        <div className="form-table">
-          <div>
-            <div className="text">Вода</div>
-            <div className="bottle-table">
-              {this.renderBottles()}
-            </div>
+      </div>
+      <div className="form-group">
+        <div className="form-check">
+          <input
+            required
+            id="rules"
+            name="consent"
+            className="form-check-input"
+            onChange={this.handleConsent}
+            type="checkbox"
+            checked={form.consent}
+          />
+          <label className="form-check-label" htmlFor="rules">
+            Я согласен на обработку персональных данных
+          </label>
+        </div>
+      </div>
+      <div className="form-table">
+        <div>
+          <div className="text">Вода</div>
+          <div className="bottle-table">
+            {this.renderBottles()}
           </div>
-          <div className="text">
-            <div>Дата и время доставки</div>
-            <div className="accessory-text">ДЕНЬ</div>
-            <div className="time-table">
-              {this.renderDays()}
-            </div>
-            <div className="accessory-text">ВРЕМЯ</div>
-            <div className="time-table hours">
-              {this.renderHours()}
-            </div>
+        </div>
+        <div className="text">
+          <div>Дата и время доставки</div>
+          <div className="accessory-text">ДЕНЬ</div>
+          <div className="time-table">
+            {this.renderDays()}
+          </div>
+          <div className="accessory-text">ВРЕМЯ</div>
+          <div className="time-table hours">
+            {this.renderHours()}
+          </div>
+        </div>
+      </div>
+      <div className="form-table with-border">
+        <div className="text">Итого</div>
+        <div className="right-text ">
+          <span>{this.getTotalPrice()},</span><span className="grey">00 {String.fromCharCode(8381)}</span>
+        </div>
+      </div>
+      <input type="submit" id="makeOrder" disabled={this.isDisabledSubmit()}/>
+      <label htmlFor="makeOrder" onClick={this.onClickSubmit}></label>
+    </form>
+    );
+  }
+
+  renderResult() {
+    const { form } = this.state;
+    const index = days.findIndex((el) => el[0] === form.day);
+    return (
+      <div className="main-block">
+        <div className="form-header">
+          <img src={checkmark} alt="checkmark"></img>
+          <span className="tab">Заказ оформлен</span>
+        </div>
+        <div className="order-list">
+          <div className={form.bottles.big.amount === 0 ? "result-hidden" : "form-table"}>
+            <span className="left">Бутыль 18,9л</span>
+            <span className="right">{form.bottles.big.amount} шт.</span>
+          </div>
+          <div className={form.bottles.average.amount === 0 ? "result-hidden" : "form-table"}>
+            <span className="left">Упаковка бутылей 1,5л</span>
+            <span className="right">{form.bottles.average.amount} шт.</span>
+          </div>
+          <div className={form.bottles.small.amount === 0 ? "result-hidden" : "form-table"}>
+            <span className="left">Упаковка бутылей 0,5л</span>
+            <span className="right">{form.bottles.small.amount} шт.</span>
+          </div>
+          <div className="form-table">
+            <span className="left">{form.day} {days[index][1]}</span>
+            <span className="right">{form.time}</span>
+          </div>
+          <div className="form-table">
+            <span className="left">Адрес доставки</span>
+            <span className="right">{form.address}</span>
+          </div>
+          <div className="form-table">
+            <span className="left">Телефон</span>
+            <span className="right">{form.phone}</span>
           </div>
         </div>
         <div className="form-table with-border">
@@ -305,24 +354,10 @@ export default class Form extends React.Component {
             <span>{this.getTotalPrice()},</span><span className="grey">00 {String.fromCharCode(8381)}</span>
           </div>
         </div>
-        <input type="submit" id="makeOrder" disabled={this.isDisabledSubmit()}/>
-        <label htmlFor="makeOrder" onClick={this.onClickSubmit}></label>
-      </form>
-    );
-  }
-
-  renderResult() {
-    const { form } = this.state;
-    return (
-      <div className="main-block"> 
-      <div className="text">Заказ оформлен</div>
-      <div>{form.email}</div>
-      <div>{form.bottles.big.active ? 1 : 0}</div>
-      <div>{form.bottles.average.active ? 1 : 0}</div>
-      <div>{form.bottles.small.active ? 1 : 0}</div>
-      <div className="text">Итого</div>
-      <input type="reset" ></input>
-         </div>
+        <div className="message">Ваш заказ №1 успешно оформлен. В ближайшее время по указанному телефону с Вами свяжется наш менеджер</div>
+        <input type="submit" id="reset"/>
+      <label htmlFor="reset" onClick={this.handleReset}></label>
+    </div>
     );
   }
 

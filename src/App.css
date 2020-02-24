@@ -42,6 +42,7 @@ aside {
   top: 30px;
   background: #F5F8FF;
   border-radius: 6px;
+  color: #455273;
 }
 
 .form-header {
@@ -61,11 +62,12 @@ aside {
   font-weight: normal;
   font-size: 12px;
   line-height: 23px;
-  background: none;
+  background: #F5F8FF;
   border: none;
   border-bottom: 1px solid #D5DDE0;
   margin-top: 8px;
   margin-bottom: 30px;
+  color: #455273;
 }
 
 .form-table {
@@ -119,6 +121,7 @@ input[type="checkbox"]:checked + label[for="rules"]:before {
 .form-group {
   margin-bottom: 60px;
 }
+
 
 .text {
   width: 45%;
@@ -193,7 +196,6 @@ input[type="checkbox"]:checked + label[for="rules"]:before {
 }
 
 .date-circle {
-  margin-left: 9px;
   width: 30px;
   height: 30px;
   background: #E5EDFF;
@@ -205,7 +207,8 @@ input[type="checkbox"]:checked + label[for="rules"]:before {
   height: 30px;
   background: #E5EDFF;
   border-radius: 15px; 
-  margin-right: 10px;
+  margin-right: 5px;
+  margin-left: 5px;
 }
 
 .circle-order {
@@ -213,7 +216,7 @@ input[type="checkbox"]:checked + label[for="rules"]:before {
 }
 
 .date {
-  padding-top: 4px;
+  margin-top: 4px;
   margin-bottom: 0px;
   font-style: normal;
   font-weight: 500;
@@ -273,4 +276,70 @@ label[for="makeOrder"]:before {
   border-radius: 20px;  
 }
 
+label[for="reset"]:before {
+  margin-top: 30px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 40px;
+  text-align: center;
+  vertical-align: middle;
+  color: #FFFFFF;
+  display: inline-block;
+  width: 165px;
+  height: 40px;
+  content: "Новый заказ";
+  left: 514px;
+  top: 669px;
+  background: #418DE8;
+  border-radius: 20px;  
+}
 
+.tab {
+  position: absolute;
+  margin-left: 10px;
+  line-height: 40px;
+  vertical-align: middle;
+}
+
+.order-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 736px;
+  height: 202px;
+  background: #FFFFFF;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+.left {
+  margin-left: 20px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+  color: #455273;
+}
+
+.right {
+  margin-right: 20px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15px;
+  text-align: right;
+  color: #BABDC2;
+}
+
+.result-hidden {
+  display: none;
+}
+
+.message {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 21px;
+  color: #818FB3;
+}
